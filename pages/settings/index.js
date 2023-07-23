@@ -1,7 +1,8 @@
-import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import WeightDisplays from "@/components/weightComponents/weightDisplays";
+import {withPageAuthRequired} from "@auth0/nextjs-auth0/client";
 import {useEffect, useState} from "react";
 import {apiPath} from "@/pages/api/functions/quickTools";
+import WeightDisplays from "@/components/weightComponents/weightDisplays";
+import WeightToggle from "@/components/settings/measurementToggle";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
 
@@ -22,10 +23,11 @@ export default withPageAuthRequired(function Dashboard({ user }) {
     return (
         <div className="container mx-auto sm:px-6 lg:px-8">
             {/* Page Container ^^^ */}
-            <WeightDisplays
-                userInfo={userInfo}
+            <WeightToggle
+                measurement = {userInfo}
                 refreshData={() => fetchUserInfo()}
             />
+
         </div>
     )
 })

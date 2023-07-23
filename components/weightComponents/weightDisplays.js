@@ -9,6 +9,8 @@ export default function WeightDisplays(props) {
     const [goalWeight, setGoalWeight] = useState()
     const [weightEntries, setWeightEntries] = useState()
     const [editing, setEditing] = useState(false)
+    const [disabled, setDisabled] = useState(false) //disables buttons while calling APIs
+
 
     console.log('>>> Logging props.userInfo: ', props.userInfo)
 
@@ -18,17 +20,6 @@ export default function WeightDisplays(props) {
     //     setWeightEntries(data)
     // }
     //
-    // const fetchCurrentWeight = async () => {
-    //     const res = await fetch(`${apiPath()}/api/get/currentWeight`)
-    //     const data = await res.json()
-    //     setCurrentWeight(data)
-    // }
-    //
-    // const fetchGoalWeight = async () => {
-    //     const res = await fetch(`${apiPath()}/api/get/currentWeight`)
-    //     const data = await res.json()
-    //     setGoalWeight(data)
-    // }
 
     const handleWeightEntry = (event) => {
 
@@ -38,8 +29,8 @@ export default function WeightDisplays(props) {
     }
 
     const handleWeightSubmit = async () => {
-
-        const response = await fetch(`${apiPath()}/api/post/newWeightEntry`, {
+        setDisabled(true)
+        const response = await fetch(`${apiPath()}/api/post/newWeightEntry?measurement=${props.userInfo[0].measurement}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -48,10 +39,14 @@ export default function WeightDisplays(props) {
         })
         if (response.ok) {
             console.log('>>> POST /api/post/newWeightEntry successful with body: ', JSON.stringify(currentWeight))
+            await props.refreshData()
+            setDisabled(false)
 
         } else {
             console.error('!!! Error with POST /api/post/newWeightEntry')
+            setDisabled(false)
         }
+        setEditing(false)
     }
 
     useEffect(() => {
@@ -62,15 +57,17 @@ export default function WeightDisplays(props) {
     return (
         <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
             <div className="flex flex-col items-center px-4 py-5 sm:px-6">
-                <p>Goal Weight</p>
+                {/*Following ternary code checks whether the user data is loaded, and if so displays the measurement (kg or lb)*/}
+                {/*depending on whether it is kg or lb will display the corresponding weight pulled from userData*/}
+                <p>Goal Weight {props.userInfo ? props.userInfo[0].measurement : null}</p>
                 {props.userInfo ? <p>{props.userInfo[0].goalweightkg}</p> : <p>Loading</p>}
             </div>
             <div className="flex flex-col items-center px-4 py-5 sm:p-6">
-                <p>Current Weight</p>
-                {props.userInfo ? <p>{props.userInfo[0].currentweightkg}</p> : <p>Loading</p>}
+                <p>Current Weight {props.userInfo ? props.userInfo[0].measurement : null}</p>
+                {props.userInfo ? <p>{props.userInfo[0].measurement === 'kg' ? props.userInfo[0].currentweightkg : props.userInfo[0].currentweightlb }</p> : <p>Loading</p>}
             </div>
             <div className="flex flex-col items-center px-4 py-4 sm:px-6">
-                <p>{props.userInfo ? props.userInfo[0].goalweightkg - props.userInfo[0].currentweightkg : null } to go</p>
+                <p>{props.userInfo ? props.userInfo[0].goalweightkg - props.userInfo[0].currentweightkg : null } {props.userInfo ? props.userInfo[0].measurement : null} to go</p>
             </div>
             <div className="flex flex-col items-center px-4 py-4 sm:px-6">
                 {!editing && props.userInfo ?
@@ -108,8 +105,11 @@ export default function WeightDisplays(props) {
                             </button>
                             <button
                                 type="button"
-                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className={!disabled ? "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" :
+                                    "rounded-md bg-zinc-400 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                }
                                 onClick={() => handleWeightSubmit()}
+                                disabled={disabled}
                             >
                                 Submit
                             </button>
