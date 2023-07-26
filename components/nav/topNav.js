@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useRouter } from "next/router";
 
 const navigation = [
     { name: 'Home', href: '/dashboard', current: true },
@@ -13,6 +14,9 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+
+    const router = useRouter();
+
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
@@ -32,11 +36,14 @@ export default function Example() {
                             </div>
                             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                                 <div className="flex flex-shrink-0 items-center">
-                                    <img
-                                        className="block h-8 w-auto lg:hidden"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                        alt="Your Company"
-                                    />
+                                    <svg
+                                        viewBox="0 0 512 512"
+                                        fill="white"
+                                        height="2em"
+                                        width="2em"
+                                    >
+                                        <path d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128S185.3 48 256 48s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128v320c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64h-56.2zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5.3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40 0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                                    </svg>
                                     <img
                                         className="hidden h-8 w-auto lg:block"
                                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
@@ -50,10 +57,10 @@ export default function Example() {
                                                 key={item.name}
                                                 href={item.href}
                                                 className={classNames(
-                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                    router.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'rounded-md px-3 py-2 text-sm font-medium'
                                                 )}
-                                                aria-current={item.current ? 'page' : undefined}
+                                                aria-current={router.pathname === item.href ? 'page' : undefined}
                                             >
                                                 {item.name}
                                             </a>
@@ -136,10 +143,10 @@ export default function Example() {
                                     as="a"
                                     href={item.href}
                                     className={classNames(
-                                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                        router.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                         'block rounded-md px-3 py-2 text-base font-medium'
                                     )}
-                                    aria-current={item.current ? 'page' : undefined}
+                                    aria-current={router.pathname === item.href ? 'page' : undefined}
                                 >
                                     {item.name}
                                 </Disclosure.Button>

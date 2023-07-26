@@ -17,7 +17,7 @@ export default withApiAuthRequired(async function ProtectedRoute(req, res) {
   console.log('>>>', localTimeDisplay(), ' Received [/api/get/weightEntries] with userid: ', user.sub)
 
   //Query
-  const text = 'SELECT * FROM wtweightentry WHERE userid = $1'
+  const text = 'SELECT * FROM wtweightentry WHERE userid = $1 ORDER BY timeofentry DESC LIMIT 5'
   const values = [user.sub]
 
   try {

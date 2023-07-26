@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {apiPath} from "@/pages/api/functions/quickTools";
 import WeightDisplays from "@/components/weightComponents/weightDisplays";
 import WeightToggle from "@/components/settings/measurementToggle";
+import PreviousEntries from "@/components/statsComponents/previousEntries";
+import GoalWeightSetter from "@/components/settings/goalWeightSetter";
 
 export default withPageAuthRequired(function Dashboard({ user }) {
 
@@ -27,7 +29,10 @@ export default withPageAuthRequired(function Dashboard({ user }) {
                 measurement = {userInfo}
                 refreshData={() => fetchUserInfo()}
             />
-
+            <GoalWeightSetter
+                userInfo={userInfo}
+                refreshData={() => fetchUserInfo()}
+            />
         </div>
     )
 })

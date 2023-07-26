@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {apiPath, roundTwoDecimal} from "@/pages/api/functions/quickTools";
+import {SyncLoader} from "react-spinners";
 
 
 export default function WeightDisplays(props) {
@@ -13,13 +14,6 @@ export default function WeightDisplays(props) {
 
 
     console.log('>>> Logging props.userInfo: ', props.userInfo)
-
-    // const fetchWeightEntries = async () => {
-    //     const res = await fetch(`${apiPath()}/api/get/weightEntries`) //Check Vercel URL updated
-    //     const data = await res.json()
-    //     setWeightEntries(data)
-    // }
-    //
 
     const handleWeightEntry = (event) => {
 
@@ -50,7 +44,6 @@ export default function WeightDisplays(props) {
     }
 
     useEffect(() => {
-        // fetchWeightEntries()
         // fetchCurrentWeight()
     },[])
 
@@ -60,7 +53,7 @@ export default function WeightDisplays(props) {
                 {/*Following ternary code checks whether the user data is loaded, and if so displays the measurement (kg or lb)*/}
                 {/*depending on whether it is kg or lb will display the corresponding weight pulled from userData*/}
                 <p>Goal Weight {props.userInfo ? props.userInfo[0].measurement : null}</p>
-                {props.userInfo ? <p>{props.userInfo[0].goalweightkg}</p> : <p>Loading</p>}
+                {props.userInfo ? <p>{props.userInfo[0].measurement === 'kg' ? props.userInfo[0].goalweightkg : props.userInfo[0].goalweightlb}</p> : <p>Loading</p>}
             </div>
             <div className="flex flex-col items-center px-4 py-5 sm:p-6">
                 <p>Current Weight {props.userInfo ? props.userInfo[0].measurement : null}</p>
