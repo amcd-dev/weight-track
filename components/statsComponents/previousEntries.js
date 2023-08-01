@@ -1,4 +1,5 @@
 import {SyncLoader} from "react-spinners";
+import {formatDateFromEpoch} from "@/pages/api/functions/quickTools";
 
 const people = [
     { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
@@ -42,7 +43,8 @@ export default function PreviousEntries(props) {
                                 {props.entryData ? props.entryData.map((entry) => (
                                     <tr key={entry.id}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                            {new Date(Date.parse(entry.timeofentry)).toLocaleString()}
+                                            {/*{new Date(Date.parse(entry.timeofentry)).toLocaleString()}*/}
+                                            {formatDateFromEpoch(Date.parse(entry.timeofentry))}
                                             {/*TODO simplify the above with a function*/}
                                             {/*Only way I could figure out how to take the timestamp string from the db fetch and convert it to local time*/}
                                         </td>

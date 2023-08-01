@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 const navigation = [
     { name: 'Home', href: '/dashboard', current: true },
-    { name: 'Stats', href: '#', current: false },
+    { name: 'Stats', href: '/stats', current: false },
     { name: 'Settings', href: '/settings', current: false}
 ]
 
