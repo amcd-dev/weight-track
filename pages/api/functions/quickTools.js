@@ -3,7 +3,7 @@ export const apiPath = () => {
         console.log('>>> Determined location.hostname is Local Host: ', location.hostname)
         return 'http://localhost:3000'
     } else {
-        console.log('>>> Determined location.hostname is fi-fit: ', location.hostname)
+        console.log('>>> Determined location.hostname is weight-track: ', location.hostname)
         return 'https://weight-track-umber.vercel.app'
     }
 }

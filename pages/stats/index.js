@@ -63,9 +63,20 @@ export default withPageAuthRequired(function Stats({ user }) {
         This function takes an array of objects and converts it to an array of arrays for the purposes of plotting a
         timeline graph. It extracts and returns only the weight entry and timestamp
          */
-        console.log('>>> successful trigger of convertDataForLineGraph')
-        console.log('>>> Logging array conversion for apex charts', array.map(obj => [obj.timeofentryepoch, obj.weightentrykg]) )
-        return array.map(obj => [obj.timeofentryepoch, obj.weightentrykg])
+
+        // return array.map(obj => [obj.timeofentryepoch, obj.weightentrykg])
+
+        if (userInfo[0].measurement === 'kg') {
+            console.log('>>> [convertDataForLineGraph] [kb] Logging array conversion for apex charts', array.map(obj => [obj.timeofentryepoch, obj.weightentrykg]) )
+            return array.map(obj => [obj.timeofentryepoch, obj.weightentrykg])
+        } else if (userInfo[0].measurement === 'lb') {
+            console.log('>>> [convertDataForLineGraph] [lb] Logging array conversion for apex charts', array.map(obj => [obj.timeofentryepoch, obj.weightentrykg]) )
+            return array.map(obj => [obj.timeofentryepoch, obj.weightentrylb])
+        } else {
+            console.log('>>> [convertDataForLineGraph] returning [] and userInfo: ', userInfo)
+            return []
+        }
+
     }
 
     const fetchUserInfo = async () => {
@@ -79,8 +90,8 @@ export default withPageAuthRequired(function Stats({ user }) {
     const fetchPreviousEntries = async () => {
         const res = await fetch(`${apiPath()}/api/get/weightEntriesCustom?dateRange=${entryDataDateRange}`)
         const data = await res.json()
-        console.log('>>> Logging weightEntriesCustom GET response: ', data)
-        await console.log('>>> Logging array conversion for apex charts', data.map(obj => [obj.timeofentryepoch, obj.weightentrykg]) )
+        console.log('>>> [fetchPreviousEntries] Logging [weightEntriesCustom] GET response: ', data)
+
         await setChartOptions({
             ...chartOptions,
             series: [{
@@ -90,10 +101,16 @@ export default withPageAuthRequired(function Stats({ user }) {
         setWeightEntries(data)
     }
 
+    //Useeffect method to help chart load correct data
     useEffect(() => {
-        fetchUserInfo()
-        fetchPreviousEntries()
-    },[])
+        fetchUserInfo();
+    }, []);
+
+    useEffect(() => {
+        if (userInfo) {
+            fetchPreviousEntries();
+        }
+    }, [userInfo]);
 
     return (
         <div className="container mx-auto sm:px-6 lg:px-8">
